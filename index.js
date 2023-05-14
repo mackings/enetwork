@@ -19,7 +19,7 @@ mg.connect(process.env.DB,{
     console.log("DB Connected")
     );
 
-app.listen(process.env.PORT || 5000 );
+app.listen(process.env.PORT || 3000 );
 } catch (error) {
     
 }
