@@ -6,8 +6,9 @@ const { createwallet } = require("../controllers/wallets/walletcontroller");
 const { getbalance } = require("../controllers/wallets/balance");
 const { Register, login } = require("../controllers/Authentication/auth");
 const { verifytoken } = require("../controllers/middlewares");
+const { home } = require("../home,js");
 const router = express.Router();
-
+router.get("/",home);
 router.get("/coinrates",coinrates);
 router.get("/balance/:wallet",getbalance);
 router.post("/createwallet", verifytoken, createwallet);
