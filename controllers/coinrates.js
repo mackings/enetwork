@@ -25,3 +25,30 @@ exports.coinrates = async (req,res)=>{
     }
 
 }
+
+exports.Gettokenlist =  async (req,res)=>{
+    try {
+        const response = await axios.get('https://api.coingecko.com/api/v3/coins/');
+
+        const ethereumTokens = response.data.filter(token => token.platforms && token.platforms.ethereum);
+        const tokenList = ethereumTokens.map(token => ({
+          name: token.name,
+          symbol: token.symbol,
+          contractAddress: token.platforms.ethereum,
+        }));
+    
+        console.log(tokenList);
+        res.status(200).json({
+            data:response
+        });
+        return tokenList;
+
+      } catch (error) {
+        res.status(500).json({
+            message:"Error",
+            data:error.message
+        });
+        console.error('Error fetching tokens:', error);
+      }
+
+}
