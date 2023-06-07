@@ -15,7 +15,7 @@ const privateKey = process.env.CKEY;
 
 
 
-exports.Purchase = async (req, res) => {
+exports.Purchase = async (req, res) => { 
   try {
     const {tokenToBuy} = req.params;
     const amountToBuy = '1'; 

@@ -2,27 +2,27 @@ const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 
+const apiUrl = 'https://api.coingecko.com/api/v3';
+
 exports.coinrates = async (req,res)=>{
 
-    try {
-       const datares = await  axios.get("https://blockchain.info/ticker");
-       res.status(200).json({
-        data:datares.data
-       });
-     console.log(datares.data);
+  try {
+    const response = await axios.get(`${apiUrl}/coins/list`);
+    const tokens = response.data.filter(token => token.platforms && token.platforms['ethereum']);
 
-    } catch (error) {
+    // Create an array of token objects with symbol and contract address
+    const tokenList = tokens.map(token => ({
+      symbol: token.symbol,
+      contractAddress: token.platforms['ethereum']
+    }));
 
-        if (error) {
-            console.log("error Occoured");
-           res.status(500).json({
-               data:error
-               });
-        } else {
-            
-        } 
-        
-    }
+    // Send the token list as JSON response
+    res.status(200).json(tokenList);
+    console.log(tokenList);
+  } catch (error) {
+    console.error('Error fetching ERC-20 tokens:', error);
+    res.status(500).json({ error: 'An error occurred while fetching ERC-20 tokens' });
+  }
 
 }
 
