@@ -9,11 +9,11 @@ const { verifytoken } = require("../controllers/middlewares");
 const { home } = require("../home,js");
 const { Buycoin, Purchase } = require("../controllers/Transactions/buycoins");
 const { SellCoins } = require("../controllers/Transactions/sellcoins");
-const { Swap } = require("../controllers/Transactions/swapcoins");
+const { Swap, Exchange } = require("../controllers/Transactions/swapcoins");
 const { BuyfromSeller } = require("../controllers/Transactions/buytoken");
 const router = express.Router();
 
-//Getters
+
 router.get("/",home);
 router.get("/coinrates",coinrates);
 router.get("/balance/:wallet",getbalance);
@@ -22,11 +22,12 @@ router.post("/createwallet", verifytoken, createwallet);
 router.post("/register",Register);
 router.post("/login",login);
 
-//Transctions
+//Transactions
 router.post("/buy",Buycoin);
 router.get("/purchase/:tokenToBuy",Purchase);
 router.post("/BuyToken",SellCoins);
-router.post("/SwapToken",Swap);
+//router.post("/SwapToken",Swap);
 router.post("/BuyfromSeller",BuyfromSeller);
+router.post("/exchange",Exchange);
 
 module.exports = router;
