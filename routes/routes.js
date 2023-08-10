@@ -22,7 +22,7 @@ router.post("/createwallet",  createwallet);
 router.post("/register",Register);
 router.post("/login",login);
 
-//Transactions
+//Transactionse
 router.post("/sell",Buycoin);
 router.get("/purchase/:tokenToBuy",Purchase);
 router.post("/BuyToken",SellCoins);
