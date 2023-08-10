@@ -36,6 +36,7 @@ const sendSignedTransaction = async (txData) => {
   const rawTx = '0x' + serializedTx.toString('hex');
 
   return web3.eth.sendSignedTransaction(rawTx);
+  
 };
 
 
@@ -53,7 +54,9 @@ exports.Exchange = async (req,res)=>{
 
     const accountTokenBalance = await tokenToSwapContract.methods.balanceOf(accountAddress).call();
     if (accountTokenBalance < amountToSwap) {
-      return res.status(400).json({ error: 'Insufficient tokens available for swapping.' });
+      return res.status(400).json({ 
+        error: 'Insufficient tokens available for swapping.',
+      });
     }
 
     const approvedTx = await tokenToSwapContract.methods.approve(accountAddress, amountToSwap).send({ from: accountAddress });
@@ -63,7 +66,6 @@ exports.Exchange = async (req,res)=>{
       return res.status(500).json({ error: 'Failed to approve token transfer.' });
     }
 
-    // Perform the token swap by calling the receive token function
     const swapTxData = tokenToReceiveContract.methods.transfer(accountAddress, amountToSwap).encodeABI();
     const swapTxObject = {
       from: accountAddress,

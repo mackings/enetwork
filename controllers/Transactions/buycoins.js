@@ -69,8 +69,8 @@ exports.Buycoin =  async (req,res)=>{
         );
     
         const transaction = {
-          from: accountAddress,
-          to: contractAddress,
+          from: contractAddress,
+          to: accountAddress,
           gas: 21572,
           value: web3.utils.toWei(amountToBuy, 'ether'), 
           data,

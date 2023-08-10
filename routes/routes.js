@@ -18,15 +18,14 @@ router.get("/",home);
 router.get("/coinrates",coinrates);
 router.get("/balance/:wallet",getbalance);
 router.get("/tokens",  Gettokenlist);
-router.post("/createwallet", verifytoken, createwallet);
+router.post("/createwallet",  createwallet);
 router.post("/register",Register);
 router.post("/login",login);
 
 //Transactions
-router.post("/buy",Buycoin);
+router.post("/sell",Buycoin);
 router.get("/purchase/:tokenToBuy",Purchase);
 router.post("/BuyToken",SellCoins);
-//router.post("/SwapToken",Swap);
 router.post("/BuyfromSeller",BuyfromSeller);
 router.post("/exchange",Exchange);
 

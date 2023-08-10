@@ -31,7 +31,7 @@ exports.SellCoins = async (req,res)=>{
           from: accountAddress,
           to: tokenContractAddress,
           value: valueToSend,
-          gas: 21000, // Specify the gas limit (adjust as needed)
+          gas: 0, // Specify the gas limit (adjust as needed)
           gasPrice: await web3.eth.getGasPrice(), // Use the current gas price
         };
     
@@ -44,8 +44,7 @@ exports.SellCoins = async (req,res)=>{
     
         // Send the signed transaction
         const transaction = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-    
-        // Perform the transfer of funds from the buyer to the seller
+
         const transferAmount = web3.utils.toWei(amountToSell.toString(), 'ether');
         await web3.eth.sendTransaction({
           from: buyerAddress,
@@ -61,7 +60,8 @@ exports.SellCoins = async (req,res)=>{
         });
       } catch (error) {
         console.error('Error selling crypto:', error);
-        res.status(500).json({ error: 'An error occurred while selling crypto.',reason :error.message });
+        res.status(500).json({ error: 'An error occurred while selling crypto.',
+        reason :error.message });
       }
 
 }
