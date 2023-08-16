@@ -18,7 +18,7 @@ router.get("/",home);
 router.get("/coinrates",coinrates);
 router.get("/balance/:wallet",getbalance);
 router.get("/tokens",  Gettokenlist);
-router.post("/createwallet",  createwallet);
+router.post("/createwallet",verifytoken, createwallet);
 router.post("/register",Register);
 router.post("/login",login);
 
