@@ -9,7 +9,7 @@ const settings = {
     
 };
 
-exports.createwallet = async  (req,res)=>{
+exports.createwallet = async  (req,res)=> {
 
     try {
         const alchemy =  new Alchemy(settings);
@@ -20,7 +20,6 @@ exports.createwallet = async  (req,res)=>{
         //console.log(trans);
         console.log(create);
         res.status(200).json({
-            //data:[trans],
             account:[create]
         })
     } catch (error) {

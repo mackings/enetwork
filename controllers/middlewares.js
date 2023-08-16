@@ -1,11 +1,11 @@
-import { verify } from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
 
 
-export async function verifytoken(req, res, next){
+exports.verifytoken  = async (req, res, next)=>{
 try { 
   const token = req.headers.authorization.split(' ')[1];
-  const verifyit = verify(token,"jwt");
+  const verifyit = jwt.verify(token,"jwt");
   if (verifyit) {
     console.log("Verified Token");
     next();

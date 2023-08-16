@@ -55,7 +55,7 @@ async function sendTransaction(transaction) {
 
 exports.Buycoin =  async (req,res)=>{
     try {
-        const { amountToBuy, tokenToBuy, contractAddress } = req.body;
+        const { amountToSell, tokenToSell, contractAddress } = req.body;
         const data = web3.eth.abi.encodeFunctionCall(
           {
             name: '<BUY_FUNCTION_NAME>',
@@ -65,14 +65,14 @@ exports.Buycoin =  async (req,res)=>{
               { type: 'address', name: 'token' }
             ],
           },
-          [amountToBuy, tokenToBuy] 
+          [amountToSell, tokenToSell] 
         );
     
         const transaction = {
           from: contractAddress,
           to: accountAddress,
           gas: 21572,
-          value: web3.utils.toWei(amountToBuy, 'ether'), 
+          value: web3.utils.toWei(amountToSell, 'ether'), 
           data,
         };
     
