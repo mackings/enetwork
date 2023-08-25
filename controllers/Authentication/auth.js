@@ -75,14 +75,14 @@ exports.login = async (req, res) => {
                 const token = jwt.sign({ uemail }, "jwt", { expiresIn: "1h" });
 
                 // Fetch the user's beneficiaries
-                const beneficiaries = await Beneficiary.find({ user: euser._id });
+                const benefit = await beneficiary.find({ user: euser._id });
 
                 res.status(200).json({
                     status: "Success",
                     message: "Successfully Logged in",
                     id: euser._id,
                     token: token,
-                    beneficiaries: beneficiaries
+                    beneficiaries: benefit
                 });
                 console.log(token);
             } else {
@@ -112,7 +112,7 @@ exports.login = async (req, res) => {
 exports.addBeneficiary = async (req, res) => {
     try {
         const newBeneficiary = new beneficiary({
-            user: req.user._id, 
+            user: req.body._id, 
             name: req.body.name,
             email: req.body.email,
             walletAddress: req.body.walletAddress
@@ -123,6 +123,34 @@ exports.addBeneficiary = async (req, res) => {
             status: "Success",
             message: "Beneficiary added successfully",
             beneficiary: savedBeneficiary
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: "Error",
+            message: "An error occurred"
+        });
+    }
+};
+
+
+
+exports.removeBeneficiary = async (req, res) => {
+    try {
+        const beneficiaryId = req.params.id; 
+        
+        const removedBeneficiary = await beneficiary.findByIdAndRemove(beneficiaryId);
+
+        if (!removedBeneficiary) {
+            return res.status(404).json({
+                status: "Error",
+                message: "Beneficiary not found"
+            });
+        }
+
+        res.status(200).json({
+            status: "Success",
+            message: "Beneficiary removed successfully"
         });
     } catch (error) {
         console.log(error);
