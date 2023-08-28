@@ -65,7 +65,7 @@ exports.login = async (req, res) => {
             password: req.body.password
         });
 
-        const euser = await usermodel.findOne({ email: req.body.email });
+        const euser =  usermodel.findOne({ email: req.body.email });
         if (euser) {
             const checkpass = bcrypt.compareSync(req.body.password, euser.password);
 
