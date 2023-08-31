@@ -60,12 +60,8 @@ exports.Register = async (req,res)=>{
 
 exports.login = async (req, res) => {
     try {
-        const userlogin = new usermodel({
-            email: req.body.email,
-            password: req.body.password
-        });
+        const euser = await usermodel.findOne({ email: req.body.email });
 
-        const euser =  usermodel.findOne({ email: req.body.email });
         if (euser) {
             const checkpass = bcrypt.compareSync(req.body.password, euser.password);
 
@@ -73,8 +69,6 @@ exports.login = async (req, res) => {
                 const uemail = euser.email;
                 console.log(uemail);
                 const token = jwt.sign({ uemail }, "jwt", { expiresIn: "1h" });
-
-                // Fetch the user's beneficiaries
                 const benefit = await beneficiary.find({ user: euser._id });
 
                 res.status(200).json({
