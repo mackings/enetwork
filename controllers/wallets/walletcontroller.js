@@ -1,6 +1,7 @@
 const express = require("express");
 const {Alchemy,Network} = require('alchemy-sdk');
-const Web = require("web3");
+//const Web = require("web3");
+const { Web3 } = require('web3');
 
 
 const settings = {
