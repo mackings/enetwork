@@ -27,6 +27,7 @@ exports.getbalance = async (req, res) => {
         });
 
         console.log(ethBalance, dollarBalance);
+        
     } catch (error) {
         res.status(500).json({
             message: "Error",
