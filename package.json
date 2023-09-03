@@ -6,6 +6,9 @@
   "scripts": {
     "start": "nodemon index js"
   },
+  "engines": {
+    "node": "16"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mackings/enetwork.git"
