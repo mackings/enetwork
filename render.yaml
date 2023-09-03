@@ -1,5 +1,5 @@
 services:
-  - name: my-app
+  - name: enet
     type: web
     buildCommand: npm install && npm run build
     env:
