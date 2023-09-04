@@ -75,7 +75,7 @@ exports.BuyfromSeller = async (req,res)=>{
       } catch (error) {
         console.error('Error purchasing tokens:', error);
         res.status(500).json({ error: 'An error occurred while purchasing tokens.',
-        reasons:error.message });
+        reasons:"Insufficient Gas fees or balance" });
       } 
 
 }

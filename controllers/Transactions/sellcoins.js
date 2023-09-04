@@ -60,7 +60,7 @@ exports.SellCoins = async (req,res)=>{
           transactionHash: transaction.transactionHash,
         });
       } catch (error) {
-        console.error('Error selling crypto:', error);
+        console.error('Error selling crypto:', "Insufficient Gas fees or balance");
         res.status(500).json({ error: 'An error occurred while selling crypto.',
         reason :error.message });
       }
