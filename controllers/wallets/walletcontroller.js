@@ -1,30 +1,31 @@
 const express = require("express");
-const {Alchemy,Network} = require('alchemy-sdk');
-//const Web = require("web3");
+const { Alchemy, Network } = require('alchemy-sdk');
 const { Web3 } = require('web3');
+const dotenv = require("dotenv").config();
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA));
 
 
-const settings = {
-    apiKey: "y50-mLsA7lAr5s4JGBOz2kE1b2_GmbGe",
-    network: Network.ETH_MAINNET,
-    
-};
-
-exports.createwallet = async  (req,res)=> {
-
+exports.createwallet = async (req, res) => {
     try {
-        const alchemy =  new Alchemy(settings);
-        //const trans =  await alchemy.core.getBlock("latest");
-        const web = new Web("https://mainnet.infura.io/v3/42da847bac9049fbb7d6e4a8bc44c594");
-        const create = web.eth.accounts.create();
-        
-        //console.log(trans);
-        console.log(create);
-        res.status(200).json({
-            account:[create]
-        })
-    } catch (error) {
-        console.log(error);
-    }
+        const create = web3.eth.accounts.create();
 
-}
+        const walletType = create.address.startsWith("0x") ? "Ethereum" : "Other";
+
+        res.status(200).json({
+            Status: "Success",
+            message: "Wallet Created Successfully",
+            address: create.address,
+            privateKey: create.privateKey,
+            walletType: walletType
+        });
+
+        console.log("Wallet created:", create.address, "Type:", walletType);
+        
+    } catch (error) {
+        res.status(500).json({
+            message: "Error",
+            error: error
+        });
+        console.error(error);
+    }
+};
