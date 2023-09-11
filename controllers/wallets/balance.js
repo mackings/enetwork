@@ -20,7 +20,8 @@ exports.getbalance = async (req, res) => {
         const dollarBalance = ethBalance * rates.data.ethereum.usd;
 
         res.status(200).json({
-            message: "Success",
+            status:"Success",
+            message: "Balance Retrieved Successfully",
             EthBalance: ethBalance.toFixed(2), // Convert to string with 2 decimal places
             DollarBalance: dollarBalance.toFixed(2), // Convert to string with 2 decimal places
             rates: rates.data.ethereum.usd
@@ -30,7 +31,8 @@ exports.getbalance = async (req, res) => {
         
     } catch (error) {
         res.status(500).json({
-            message: "Error",
+            status:"Error",
+            message: "Error Retrieving Balance ",
             error: error
         });
         console.log(error);

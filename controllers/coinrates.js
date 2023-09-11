@@ -8,13 +8,13 @@ exports.Coinrates = async (req, res) => {
       const response = await axios.get(process.env.RATES);
       const data = response.data;
       res.status(200).json({
-          status: 'success', // Set the status to 'success'
+          status: 'success', 
           data: data
       });
   } catch (error) {
       console.error('Error:', error.message);
       res.status(500).json({
-          status: 'error', // Set the status to 'error'
+          status: 'error', 
           message: 'Internal Server Error'
       });
   }
@@ -29,7 +29,7 @@ exports.Coinratesbyid = async (req, res) => {
         const response = await axios.get(`https://api.coinlore.net/api/ticker/?id=${id}`);
         const data = response.data;
         res.status(200).json({
-            status: 'success', // Set the status to 'success'
+            status: 'success', 
             data: data
         });
     } catch (error) {
