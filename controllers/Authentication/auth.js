@@ -27,7 +27,7 @@ exports.Register = async (req,res)=>{
     const finduser =  await usermodel.findOne({email:req.body.email});
     if (finduser) {
         
-        res.status(500).json({
+        res.status(200).json({
             error:"User Already Existss ",
             user:User.email,
             id:finduser._id
@@ -43,7 +43,7 @@ exports.Register = async (req,res)=>{
         });
         
     }
-
+ 
         
     } catch (error) {
         console.log(error);

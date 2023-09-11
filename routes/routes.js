@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
 const mg = require("mongoose");
-const { coinrates, Gettokenlist } = require("../controllers/coinrates");
+const { Coinrates } = require("../controllers/coinrates");
 const { createwallet } = require("../controllers/wallets/walletcontroller");
 const { getbalance } = require("../controllers/wallets/balance");
 const { Register, login, addBeneficiary, removeBeneficiary } = require("../controllers/Authentication/auth");
@@ -15,9 +15,7 @@ const router = express.Router();
 
 
 router.get("/",home);
-router.get("/coinrates",coinrates);
 router.get("/balance/:wallet",getbalance);
-router.get("/tokens",  Gettokenlist);
 router.post("/createwallet",  createwallet);
 router.post("/register",Register);
 router.post("/login",login);
@@ -28,6 +26,9 @@ router.get("/purchase/:tokenToBuy",Purchase);
 router.post("/BuyToken",SellCoins);
 router.post("/BuyfromSeller",BuyfromSeller);
 router.post("/exchange",Exchange);
+
+//Rates
+router.get("/rates",Coinrates);
 
 //Beneficiaries
 router.post("/addbeneficiary",addBeneficiary);
