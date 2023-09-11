@@ -14,7 +14,7 @@ const privateKey = process.env.CKEY;
 
 
 // Define a function for buying tokens from a seller
-exports.BuyfromSeller = async (req, res) => {
+exports.BuyfromEnet = async (req, res) => {
     try {
       
         const sellerAddress = req.body.sellerAddress;

@@ -10,7 +10,7 @@ const { home } = require("../home,js");
 const { Buycoin, Purchase } = require("../controllers/Transactions/buycoins");
 const { SellCoins } = require("../controllers/Transactions/sellcoins");
 const { Swap, Exchange } = require("../controllers/Transactions/swapcoins");
-const { BuyfromSeller } = require("../controllers/Transactions/buytoken");
+const { BuyfromEnet } = require("../controllers/Transactions/buytoken");
 const router = express.Router();
 
 
@@ -24,7 +24,7 @@ router.post("/login",login);
 router.post("/sell",Buycoin);
 router.get("/purchase/:tokenToBuy",Purchase);
 router.post("/BuyToken",SellCoins);
-router.post("/BuyfromSeller",BuyfromSeller);
+router.post("/BuyfromEnet",BuyfromEnet);
 router.post("/exchange",Exchange);
 
 //Rates
