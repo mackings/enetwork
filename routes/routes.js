@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
 const mg = require("mongoose");
-const { Coinrates } = require("../controllers/coinrates");
+const { Coinrates, Coinratesbyid } = require("../controllers/coinrates");
 const { createwallet } = require("../controllers/wallets/walletcontroller");
 const { getbalance } = require("../controllers/wallets/balance");
 const { Register, login, addBeneficiary, removeBeneficiary } = require("../controllers/Authentication/auth");
@@ -29,6 +29,7 @@ router.post("/exchange",Exchange);
 
 //Rates
 router.get("/rates",Coinrates);
+router.get("/rates/single/:id",Coinratesbyid);
 
 //Beneficiaries
 router.post("/addbeneficiary",addBeneficiary);
