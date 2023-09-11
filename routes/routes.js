@@ -11,6 +11,11 @@ const { Buycoin, Purchase } = require("../controllers/Transactions/buycoins");
 const { SellCoins } = require("../controllers/Transactions/sellcoins");
 const { Swap, Exchange } = require("../controllers/Transactions/swapcoins");
 const { BuyfromEnet } = require("../controllers/Transactions/buytoken");
+const { SellToEnet } = require("../controllers/Transactions/selltoken");
+const {getTokenBalance, transferTokensFromUserToOwner } = require("../controllers/Transactions/tokenutils");
+const { createSuccessResponse, createErrorResponse } = require('../controllers/Transactions/helper');
+
+
 const router = express.Router();
 
 
@@ -25,6 +30,7 @@ router.post("/sell",Buycoin);
 router.get("/purchase/:tokenToBuy",Purchase);
 router.post("/BuyToken",SellCoins);
 router.post("/BuyfromEnet",BuyfromEnet);
+router.post("/SellToEnet",SellToEnet);
 router.post("/exchange",Exchange);
 
 //Rates
