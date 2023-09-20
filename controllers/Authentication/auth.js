@@ -7,7 +7,7 @@ const beneficiary = require("../models/beneficiary");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const saltrounds = 10;
-
+const otpService = require("../emailservice");
 
 
 exports.Register = async (req,res)=>{
@@ -55,7 +55,56 @@ exports.Register = async (req,res)=>{
         
     }   
 
-}
+},
+
+exports.Sendotp = async (req,res)=>{
+
+    try {
+        const email = req.body.email;
+
+        try {
+          const info = await otpService.sendOTP(email);
+          console.log('OTP sent: ' + info.response);
+          res.status(200).send('OTP sent successfully');
+        } catch (error) {
+          console.error(error);
+          res.status(500).send('Error sending OTP email');
+        }
+
+        
+    } catch (error) {
+        
+    }
+
+},
+
+
+
+exports.Verifyotp = async (req,res)=>{
+
+    try {
+
+        const userOTP = req.body.otp;
+        const storedOTP = otpService.otp; 
+      
+        if (!storedOTP) {
+          return res.status(400).send('OTP not found');
+        }
+      
+        const isValid = otpService.verifyOTP(storedOTP, userOTP);
+      
+        if (isValid) {
+          res.status(200).send('OTP is valid');
+        } else {
+          res.status(401).send('Invalid OTP');
+        }
+
+        
+    } catch (error) {
+        
+    }
+
+},
 
 
 exports.login = async (req, res) => {
