@@ -1,38 +1,55 @@
-const emailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 const speakeasy = require('speakeasy');
 require('dotenv').config();
-const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+//sgMail.setApiKey("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");
 
-function sendOTP(email) {
-  const otp = speakeasy.totp({
-    secret: speakeasy.generateSecret().base32,
-    step: 300,
-  });
+class OTPService {
+  constructor() {
+    // Generate the OTP secret key during service initialization
+    this.otpSecret = speakeasy.generateSecret().base32;
+  }
 
-  const msg = {
-    to: email,
-    from: 'Kayd@Enet.com', // Replace with your sender email address
-    subject: 'Your OTP Code',
-    text: `Your OTP code is: ${otp}`,
-  };
+  async sendOTP(email) {
+    const otp = speakeasy.totp({
+      secret: this.otpSecret,
+      step: 300,
+    });
 
-  return sgMail.send(msg);
+    const msg = {
+      to: email,
+      from: 'Kayd@Enet.com', // Replace with your sender email address
+      subject: 'Your OTP Code',
+      text: `Your OTP code is: ${otp}`,
+    };
+
+    try {
+      const info = await sgMail.send(msg);
+      console.log('OTP sent: ' + info.response);
+      return true;
+    } catch (error) {
+      console.error(error.message);
+      return false;
+    }
+  }
+
+  verifyOTP(userOTP) {
+    const isValid = speakeasy.totp.verify({
+      secret: this.otpSecret,
+      encoding: 'base32',
+      token: userOTP,
+      window: 1,
+    });
+
+    return isValid;
+  }
 }
 
-function verifyOTP(storedOTP, userOTP) {
-  const isValid = speakeasy.totp.verify({
-    secret: storedOTP.secret,
-    encoding: 'base32',
-    token: userOTP,
-    window: 1,
-  });
+module.exports = OTPService;
 
-  return isValid;
-}
 
-module.exports = {
-  sendOTP,
-  verifyOTP,
-};
+// module.exports = {
+//   sendOTP,
+//   verifyOTP,
+// };

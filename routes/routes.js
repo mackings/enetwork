@@ -14,7 +14,7 @@ const { BuyfromEnet } = require("../controllers/Transactions/buytoken");
 const { SellToEnet } = require("../controllers/Transactions/selltoken");
 const {getTokenBalance, transferTokensFromUserToOwner } = require("../controllers/Transactions/tokenutils");
 const { createSuccessResponse, createErrorResponse } = require('../controllers/Transactions/helper');
-const { sendOTP , verifyOTP } = require("../controllers/emailservice");
+const { Sendotp, Verifyotp } = require("../controllers/Authentication/auth");
 
 
 const router = express.Router();
@@ -25,8 +25,8 @@ router.get("/balance/:wallet",getbalance);
 router.post("/createwallet",  createwallet);
 router.post("/register",Register);
 router.post("/login",login);
-router.post("/sendotp",sendOTP);
-router.post("/verifyotp",sendOTP);
+router.post("/sendotp",Sendotp);
+router.post("/verifyotp",Verifyotp);
 
 //Transactionse
 router.post("/sell",Buycoin);
