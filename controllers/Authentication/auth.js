@@ -145,6 +145,88 @@ exports.login = async (req, res) => {
 
 
 
+exports.requestResetToken = async (req, res) => {
+    const { email } = req.body;
+  
+    try {
+      const user = await usermodel.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({
+          status: 'Error',
+          message: 'User not found',
+        });
+      }
+  
+      const resetToken = crypto.randomBytes(20).toString('hex');
+      const resetTokenExpires = Date.now() + 3600000; // Token expires in 1 hour
+  
+      // Save the reset token and its expiration time to the user document
+      user.resetToken = resetToken;
+      user.resetTokenExpires = resetTokenExpires;
+      await user.save();
+  
+      // Send an email to the user with a link containing the reset token
+      const resetLink = `${process.env.BASE_URL}/reset-password?token=${resetToken}`;
+      const emailMessage = `To reset your password, click the following link: ${resetLink}`;
+      
+      // Send the email with the reset link (you can use your email service)
+      // Example: emailService.sendEmail(user.email, 'Password Reset', emailMessage);
+  
+      res.status(200).json({
+        status: 'Success',
+        message: 'Password reset email sent successfully',
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        status: 'Error',
+        message: 'An error occurred while processing the request',
+      });
+    }
+  };
+
+
+
+  exports.resetPassword = async (req, res) => {
+    const { resetToken, newPassword } = req.body;
+  
+    try {
+      const user = await usermodel.findOne({
+        resetToken: resetToken,
+        resetTokenExpires: { $gt: Date.now() },
+      });
+  
+      if (!user) {
+        return res.status(401).json({
+          status: 'Error',
+          message: 'Invalid or expired reset token',
+        });
+      }
+  
+      const hashedPassword = await bcrypt.hash(newPassword, saltrounds);
+      user.password = hashedPassword;
+      user.resetToken = undefined;
+      user.resetTokenExpires = undefined;
+  
+      await user.save();
+  
+      res.status(200).json({
+        status: 'Success',
+        message: 'Password reset successfully',
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        status: 'Error',
+        message: 'An error occurred while processing the request',
+      });
+    }
+  };
+  
+
+
+
 exports.addBeneficiary = async (req, res) => {
     try {
         const newBeneficiary = new beneficiary({
