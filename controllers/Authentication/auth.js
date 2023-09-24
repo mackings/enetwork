@@ -8,6 +8,8 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const saltrounds = 10;
 const OTPService = require('../emailservice'); 
+const crypto = require('crypto');
+
 
 const otpService = new OTPService();
 
@@ -169,7 +171,7 @@ exports.Sendotp = async (req, res) => {
 
 
   exports.requestResetToken = async (req, res) => {
-    const { email } = req.body.email;
+    const  email  = req.body.email;
   
     try {
       const user = await usermodel.findOne({ email });
@@ -214,21 +216,10 @@ exports.Sendotp = async (req, res) => {
 
 
   exports.resetPassword = async (req, res) => {
-    const { resetToken, newPassword } = req.body;
+    const { resetToken, newPassword, identifier } = req.body;
   
     try {
-      const user = await usermodel.findOne({
-        resetToken: resetToken,
-        resetTokenExpires: { $gt: Date.now() },
-      });
-  
-      if (!user) {
-        return res.status(401).json({
-          status: 'Error',
-          message: 'Invalid or expired reset token',
-        });
-      }
-  
+      // Verify the OTP token
       const isValidToken = otpService.verifyOTP(resetToken);
   
       if (!isValidToken) {
@@ -238,7 +229,22 @@ exports.Sendotp = async (req, res) => {
         });
       }
   
+      // Get the user associated with the provided identifier
+      const user = await usermodel.findOne({
+        email: identifier, // Assuming 'email' is the unique identifier
+      });
+  
+      if (!user) {
+        return res.status(404).json({
+          status: 'Error',
+          message: 'User not found',
+        });
+      }
+  
+      // Hash the new password
       const hashedPassword = await bcrypt.hash(newPassword, saltrounds);
+  
+      // Update the user's password and clear reset token fields
       user.password = hashedPassword;
       user.resetToken = undefined;
       user.resetTokenExpires = undefined;
@@ -257,6 +263,9 @@ exports.Sendotp = async (req, res) => {
       });
     }
   };
+  
+  
+  
   
   
 
