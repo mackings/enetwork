@@ -23,7 +23,8 @@ exports.Register = async (req,res)=>{
         name:req.body.name,
         email:req.body.email,
         phone:req.body.phone,
-        password:hashedpassword
+        password:hashedpassword,
+        isVerified: false,
     });
 
     const finduser =  await usermodel.findOne({email:req.body.email});
@@ -40,7 +41,7 @@ exports.Register = async (req,res)=>{
         res.status(200).json({
             status:"Success",
             message:"User Registered Successfully ",
-            data:User._id
+            data:User
 
         });
         
@@ -88,7 +89,18 @@ exports.Sendotp = async (req, res) => {
   
       if (isValid) {
         console.log('OTP is valid');
-        res.status(200).send('OTP is valid');
+
+        const user = await usermodel.findOneAndUpdate(
+          { email: req.body.email },
+          { isVerified: true }
+        );
+  
+        if (!user) {
+          console.error('User not found');
+          return res.status(404).send('User not found');
+        }
+  
+        res.status(200).send('OTP Verified');
       } else {
         console.error('Invalid OTP');
         res.status(401).send('Invalid OTP');
@@ -98,50 +110,61 @@ exports.Sendotp = async (req, res) => {
       res.status(500).send('Internal server error');
     }
   };
+  
 
 
-exports.login = async (req, res) => {
+  exports.login = async (req, res) => {
     try {
-        const euser = await usermodel.findOne({ email: req.body.email });
+      const euser = await usermodel.findOne({ email: req.body.email });
+  
+      if (euser) {
 
-        if (euser) {
-            const checkpass = bcrypt.compareSync(req.body.password, euser.password);
-
-            if (checkpass) {
-                const uemail = euser.email;
-                console.log(uemail);
-                const token = jwt.sign({ uemail }, "jwt", { expiresIn: "1h" });
-                const benefit = await beneficiary.find({ user: euser._id });
-
-                res.status(200).json({
-                    status: "Success",
-                    message: "Successfully Logged in",
-                    id: euser._id,
-                    token: token,
-                    beneficiaries: benefit
-                });
-                console.log(token);
-            } else {
-                console.log("Incorrect login details");
-                res.status(500).json({
-                    status: "Error",
-                    message: "Incorrect Login Details"
-                });
-            }
-        } else {
-            console.log("Account not found");
-            res.status(404).json({
-                message: "Account Not Found"
-            });
+        if (!euser.isVerified) {
+          console.log('User is not verified');
+          return res.status(401).json({
+            status: 'Error',
+            message: 'User is not verified',
+          });
         }
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            status: "Error",
-            message: "An error occurred"
+  
+        const checkpass = bcrypt.compareSync(req.body.password, euser.password);
+  
+        if (checkpass) {
+          const uemail = euser.email;
+          console.log(uemail);
+          const token = jwt.sign({ uemail }, 'jwt', { expiresIn: '1h' });
+          const benefit = await beneficiary.find({ user: euser._id });
+  
+          res.status(200).json({
+            status: 'Success',
+            message: 'Successfully Logged in',
+            id: euser._id,
+            token: token,
+            beneficiaries: benefit,
+          });
+          console.log(token);
+        } else {
+          console.log('Incorrect login details');
+          res.status(500).json({
+            status: 'Error',
+            message: 'Incorrect Login Details',
+          });
+        }
+      } else {
+        console.log('Account not found');
+        res.status(404).json({
+          message: 'Account Not Found',
         });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        status: 'Error',
+        message: 'An error occurred',
+      });
     }
-};
+  };
+  
 
 
 
