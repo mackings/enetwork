@@ -168,7 +168,7 @@ exports.Sendotp = async (req, res) => {
 
 
 
-exports.requestResetToken = async (req, res) => {
+  exports.requestResetToken = async (req, res) => {
     const { email } = req.body;
   
     try {
@@ -184,22 +184,23 @@ exports.requestResetToken = async (req, res) => {
       const resetToken = crypto.randomBytes(20).toString('hex');
       const resetTokenExpires = Date.now() + 3600000; // Token expires in 1 hour
   
-      // Save the reset token and its expiration time to the user document
       user.resetToken = resetToken;
       user.resetTokenExpires = resetTokenExpires;
       await user.save();
+      const isSent = await otpService.sendOTP(email);
   
-      // Send an email to the user with a link containing the reset token
-      const resetLink = `${process.env.BASE_URL}/reset-password?token=${resetToken}`;
-      const emailMessage = `To reset your password, click the following link: ${resetLink}`;
-      
-      // Send the email with the reset link (you can use your email service)
-      // Example: emailService.sendEmail(user.email, 'Password Reset', emailMessage);
-  
-      res.status(200).json({
-        status: 'Success',
-        message: 'Password reset email sent successfully',
-      });
+      if (isSent) {
+        res.status(200).json({
+          status: 'Success',
+          message: 'Password reset email sent successfully',
+        });
+      } else {
+        console.error('Error sending OTP email');
+        res.status(500).json({
+          status: 'Error',
+          message: 'Error sending OTP email',
+        });
+      }
     } catch (error) {
       console.error(error);
       res.status(500).json({
@@ -208,6 +209,7 @@ exports.requestResetToken = async (req, res) => {
       });
     }
   };
+  
 
 
 
@@ -221,6 +223,15 @@ exports.requestResetToken = async (req, res) => {
       });
   
       if (!user) {
+        return res.status(401).json({
+          status: 'Error',
+          message: 'Invalid or expired reset token',
+        });
+      }
+  
+      const isValidToken = otpService.verifyOTP(resetToken);
+  
+      if (!isValidToken) {
         return res.status(401).json({
           status: 'Error',
           message: 'Invalid or expired reset token',
@@ -246,6 +257,7 @@ exports.requestResetToken = async (req, res) => {
       });
     }
   };
+  
   
 
 
