@@ -169,7 +169,7 @@ exports.Sendotp = async (req, res) => {
 
 
   exports.requestResetToken = async (req, res) => {
-    const { email } = req.body;
+    const { email } = req.body.email;
   
     try {
       const user = await usermodel.findOne({ email });
