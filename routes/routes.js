@@ -15,6 +15,10 @@ const { SellToEnet } = require("../controllers/Transactions/selltoken");
 const {getTokenBalance, transferTokensFromUserToOwner } = require("../controllers/Transactions/tokenutils");
 const { createSuccessResponse, createErrorResponse } = require('../controllers/Transactions/helper');
 const { Sendotp, Verifyotp } = require("../controllers/Authentication/auth");
+const { buytk } = require("../controllers/Transactions/buytk");
+const { sendTokenTransaction, sendtest } = require("../controllers/Transactions/test");
+const { swaptest } = require("../controllers/Transactions/testswap");
+
 
 
 const router = express.Router();
@@ -28,16 +32,21 @@ router.post("/verifyotp",Verifyotp);
 router.post("/resettoken",requestResetToken);
 router.post("/resetpass",resetPassword)
 
-//Transactionse
+//Transactions
 router.get("/",home);
 router.get("/balance/:wallet",getbalance);
 router.post("/createwallet",  createwallet);
-router.post("/sell",Buycoin);
-router.get("/purchase/:tokenToBuy",Purchase);
+router.post("/send",Buycoin);
+//router.get("/purchase/:tokenToBuy",Purchase);
 router.post("/BuyToken",SellCoins);
 router.post("/BuyfromEnet",BuyfromEnet);
 router.post("/SellToEnet",SellToEnet);
 router.post("/exchange",Exchange);
+
+//Test
+router.post("/buytk",buytk);
+router.post("/mytest",sendtest);
+router.post("/swaptest",swaptest);
 
 
 //Rates

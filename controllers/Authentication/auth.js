@@ -219,7 +219,6 @@ exports.Sendotp = async (req, res) => {
     const { resetToken, newPassword, identifier } = req.body;
   
     try {
-      // Verify the OTP token
       const isValidToken = otpService.verifyOTP(resetToken);
   
       if (!isValidToken) {
@@ -229,9 +228,9 @@ exports.Sendotp = async (req, res) => {
         });
       }
   
-      // Get the user associated with the provided identifier
+
       const user = await usermodel.findOne({
-        email: identifier, // Assuming 'email' is the unique identifier
+        email: identifier, 
       });
   
       if (!user) {
@@ -241,10 +240,8 @@ exports.Sendotp = async (req, res) => {
         });
       }
   
-      // Hash the new password
+
       const hashedPassword = await bcrypt.hash(newPassword, saltrounds);
-  
-      // Update the user's password and clear reset token fields
       user.password = hashedPassword;
       user.resetToken = undefined;
       user.resetTokenExpires = undefined;
