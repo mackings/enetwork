@@ -70,7 +70,10 @@ exports.Sendotp = async (req, res) => {
   
       if (isSent) {
         console.log('OTP sent successfully');
-        res.status(200).send('OTP sent successfully');
+        res.status(200).json({
+          status:"Success",
+          message:"OTP sent Successfully"
+        })
       } else {
         console.error('Error sending OTP email');
         res.status(500).send('Error sending OTP email');
@@ -102,7 +105,10 @@ exports.Sendotp = async (req, res) => {
           return res.status(404).send('User not found');
         }
   
-        res.status(200).send('OTP Verified');
+        res.status(200).json({
+          status:"Success",
+          message:"OTP verified Successfully"
+        })
       } else {
         console.error('Invalid OTP');
         res.status(401).send('Invalid OTP');
@@ -278,7 +284,7 @@ exports.addBeneficiary = async (req, res) => {
         });
 
         const savedBeneficiary = await newBeneficiary.save();
-        res.status(201).json({
+        res.status(200).json({
             status: "Success",
             message: "Beneficiary added successfully",
             beneficiary: savedBeneficiary
