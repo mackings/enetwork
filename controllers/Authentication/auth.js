@@ -10,13 +10,14 @@ const saltrounds = 10;
 const OTPService = require('../emailservice'); 
 const crypto = require('crypto');
 
+const accountsid = process.env.ACCOUNTSID;
+const authtoken = process.env.AUTHTOKEN;
+const client = require('twilio')(accountsid,authtoken);
+
 
 const otpService = new OTPService();
 
-
 exports.Register = async (req,res)=>{
-
-
 
     try {
 
@@ -30,6 +31,7 @@ exports.Register = async (req,res)=>{
     });
 
     const finduser =  await usermodel.findOne({email:req.body.email});
+
     if (finduser) {
         
         res.status(200).json({
@@ -267,7 +269,34 @@ exports.Sendotp = async (req, res) => {
     }
   };
   
+
+  exports.Sendsms = async (req, res) => {
+    const phone = req.body.phone;
+    const msg = req.body.msg;
   
+    try {
+      // Send SMS
+      const message = await client.messages.create({
+        body: msg,
+        from: '+15077085901',
+        to: phone,
+      });
+  
+      // Log the message SID
+      console.log(message.sid);
+  
+      res.status(200).json({
+        status: 'Success',
+        message: 'Message OTP sent to ' + phone,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        status: 'Error',
+        message: 'Could not send SMS',
+      });
+    }
+  };
   
   
   

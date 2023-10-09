@@ -4,7 +4,7 @@ const mg = require("mongoose");
 const { Coinrates, Coinratesbyid } = require("../controllers/coinrates");
 const { createwallet } = require("../controllers/wallets/walletcontroller");
 const { getbalance } = require("../controllers/wallets/balance");
-const { Register, login, addBeneficiary, removeBeneficiary, resetPassword, requestResetToken } = require("../controllers/Authentication/auth");
+const { Register, login, addBeneficiary, removeBeneficiary, resetPassword, requestResetToken, Sendsms } = require("../controllers/Authentication/auth");
 const { verifytoken } = require("../controllers/middlewares");
 const { home } = require("../home,js");
 const { Buycoin, Purchase } = require("../controllers/Transactions/buycoins");
@@ -37,11 +37,11 @@ router.get("/",home);
 router.get("/balance/:wallet",getbalance);
 router.post("/createwallet",  createwallet);
 router.post("/send",Buycoin);
-//router.get("/purchase/:tokenToBuy",Purchase);
 router.post("/BuyToken",SellCoins);
 router.post("/BuyfromEnet",BuyfromEnet);
 router.post("/SellToEnet",SellToEnet);
 router.post("/exchange",Exchange);
+router.post("/sendsms",Sendsms);
 
 //Test
 router.post("/buytk",buytk);
