@@ -297,6 +297,80 @@ exports.Sendotp = async (req, res) => {
       });
     }
   };
+
+  exports.CreateVerifyService = async (req, res) => {
+    try {
+        const service = await client.verify.v2.services.create({
+            friendlyName: 'Enetworks'
+        });
+        console.log(service.sid);
+
+        res.status(200).json({
+            status: "Success",
+            message: "Verify Service created with SID: " + service.sid
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            status: "Error",
+            message: "Could not create Verify Service"
+        });
+    }
+};
+
+exports.SendvCode = async (req, res) => {
+
+  const phone = req.body.phone;
+
+  try {
+      const verification = await client.verify.v2.services(process.env.VCODE)
+          .verifications
+          .create({ to: phone, channel: 'sms' });
+      
+      console.log(verification.status);
+
+      res.status(200).json({
+          status: "Success",
+          message: "Verification code sent with status: " + verification.status
+      });
+  } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+          status: "Error",
+          message: "Could not send verification code"
+      });
+  }
+};
+
+exports.Checkvcode = async (req, res) => {
+  const phone = req.body.phone; 
+  const code = req.body.code; 
+
+  try {
+      const verificationCheck = await client.verify.v2.services(process.env.VCODE)
+          .verificationChecks
+          .create({to:phone, code:code });
+      
+      console.log(verificationCheck.status);
+
+      res.status(200).json({
+          status: "Success",
+          message: "Verification code check with status: " + verificationCheck.status
+      });
+  } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+          status: "Error",
+          message: "Could not check verification code"
+      });
+  }
+};
+
+
+
   
   
   

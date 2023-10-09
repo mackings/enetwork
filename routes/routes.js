@@ -4,7 +4,7 @@ const mg = require("mongoose");
 const { Coinrates, Coinratesbyid } = require("../controllers/coinrates");
 const { createwallet } = require("../controllers/wallets/walletcontroller");
 const { getbalance } = require("../controllers/wallets/balance");
-const { Register, login, addBeneficiary, removeBeneficiary, resetPassword, requestResetToken, Sendsms } = require("../controllers/Authentication/auth");
+const { Register, login, addBeneficiary, removeBeneficiary, resetPassword, requestResetToken, Sendsms, CreateVerifyService, SendvCode, Checkvcode } = require("../controllers/Authentication/auth");
 const { verifytoken } = require("../controllers/middlewares");
 const { home } = require("../home,js");
 const { Buycoin, Purchase } = require("../controllers/Transactions/buycoins");
@@ -31,6 +31,11 @@ router.post("/sendotp",Sendotp);
 router.post("/verifyotp",Verifyotp);
 router.post("/resettoken",requestResetToken);
 router.post("/resetpass",resetPassword)
+router.post("/sendsms",Sendsms);
+//twillo
+router.post("/createservice",CreateVerifyService);
+router.post("/sendvcode",SendvCode);
+router.post("/verifyvcode",Checkvcode);
 
 //Transactions
 router.get("/",home);
@@ -41,7 +46,7 @@ router.post("/BuyToken",SellCoins);
 router.post("/BuyfromEnet",BuyfromEnet);
 router.post("/SellToEnet",SellToEnet);
 router.post("/exchange",Exchange);
-router.post("/sendsms",Sendsms);
+
 
 //Test
 router.post("/buytk",buytk);
