@@ -86,8 +86,6 @@ exports.Sendotp = async (req, res) => {
     }
   };
 
-
-
   exports.Verifyotp = async (req, res) => {
     try {
       const userOTP = req.body.otp;
@@ -121,8 +119,6 @@ exports.Sendotp = async (req, res) => {
     }
   };
   
-
-
   exports.login = async (req, res) => {
     try {
       const euser = await usermodel.findOne({ email: req.body.email });
@@ -175,9 +171,6 @@ exports.Sendotp = async (req, res) => {
     }
   };
   
-
-
-
   exports.requestResetToken = async (req, res) => {
     const  email  = req.body.email;
   
@@ -220,9 +213,6 @@ exports.Sendotp = async (req, res) => {
     }
   };
   
-
-
-
   exports.resetPassword = async (req, res) => {
     const { resetToken, newPassword, identifier } = req.body;
   
@@ -269,7 +259,6 @@ exports.Sendotp = async (req, res) => {
     }
   };
   
-
   exports.Sendsms = async (req, res) => {
     const phone = req.body.phone;
     const msg = req.body.msg;
