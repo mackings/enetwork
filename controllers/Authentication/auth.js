@@ -110,6 +110,7 @@ exports.Sendotp = async (req, res) => {
           message:"OTP verified Successfully"
         })
       } else {
+        console.log(isValid);
         console.error('Invalid OTP');
         res.status(401).send('Invalid OTP');
       }
@@ -357,12 +358,6 @@ exports.Checkvcode = async (req, res) => {
       });
   }
 };
-
-
-
-  
-  
-  
 
 
 
