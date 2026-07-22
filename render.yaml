@@ -1,7 +1,7 @@
 services:
-  - name: enet
-    type: web
-    buildCommand: npm install && npm run build
-    env:
-      - key: NODE_VERSION
-        value: 16
+  - type: web
+    name: enet
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node index.js
